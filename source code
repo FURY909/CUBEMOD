@@ -1,0 +1,51 @@
+using BepInEx;
+using System;
+using UnityEngine;
+using Utilla;
+using Photon.Pun;
+
+namespace cubemod3
+{
+    
+    /// <summary>
+    /// This is your mod's main class.
+    /// </summary>
+
+    /* This attribute tells Utilla to look for [ModdedGameJoin] and [ModdedGameLeave] */
+    [ModdedGamemode]
+    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.5.0")]
+    [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
+    public class Plugin : BaseUnityPlugin
+    {
+        public GameObject cube;
+        public Vector3 size;
+        bool inRoom;
+
+        void Start()
+        {
+            /* A lot of Gorilla Tag systems will not be set up when start is called /*
+			/* Put code in OnGameInitialized to avoid null references */
+
+            Utilla.Events.GameInitialized += OnGameInitialized;
+        }
+        
+
+        void OnGameInitialized(object sender, EventArgs e)
+        {
+            cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            Update();
+        }
+
+        void Update()
+        {
+            cube.GetComponent<BoxCollider>().enabled = false;
+            cube.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            cube.GetComponent<MeshRenderer>().material.color = Color.red;   
+            cube.transform.position = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/LeftHand Controller").transform.position;
+            cube.transform.rotation = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/LeftHand Controller").transform.rotation;
+            
+        }
+       
+
+    }
+}
